@@ -29,7 +29,16 @@ const typeDefinitions = `
 const resolvers = {
     Query: {
         info: () => `This is the API of a Hackernews Clone`,
-        feed: (parent: unknown, args: {}, context: GraphQLContext) => context.prisma.link.findMany()
+        feed: (parent: unknown, args: {}, context: GraphQLContext) => context.prisma.link.findMany(),
+        async comment(
+            parent: unknown,
+            args: { id: string },
+            context: GraphQLContext
+        ) {
+            return context.prisma.comment.findUnique({
+                where: { id: parseInt(args.id) }
+            })
+        }
     },
     Link: {
         id: (parent: Link) => parent.id,
